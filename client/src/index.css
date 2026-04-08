@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #1A1A2E;
+  --color-accent: #E86B2E;
+  --color-surface: #F7F6F2;
+  --color-white: #FFFFFF;
+  --color-success: #2D7D46;
+  --color-warning: #C9801A;
+  --color-danger: #C0392B;
+  --color-muted: #6B7280;
+  --color-border: #E5E2DC;
+  --color-card: #FFFFFF;
+  --font-heading: 'Sora', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 8px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-lg px-4 py-2.5 text-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-orange-600 focus:ring-accent;
+  }
+  .btn-outline {
+    @apply btn bg-white text-primary border border-border hover:bg-surface focus:ring-primary;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-muted hover:bg-surface hover:text-primary focus:ring-muted;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:opacity-90 focus:ring-danger;
+  }
+  .input {
+    @apply w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-primary placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-colors;
+  }
+  .label {
+    @apply block text-sm font-semibold text-primary mb-1.5;
+  }
+  .card {
+    @apply bg-card rounded-lg shadow-sm border border-border;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+  .badge-critical {
+    @apply badge bg-red-100 text-danger;
+  }
+  .badge-warning {
+    @apply badge bg-yellow-100 text-warning;
+  }
+  .badge-success {
+    @apply badge bg-green-100 text-success;
+  }
+  .badge-info {
+    @apply badge bg-blue-100 text-blue-700;
+  }
+  .badge-muted {
+    @apply badge bg-surface text-muted;
+  }
+}
