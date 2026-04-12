@@ -12,6 +12,11 @@ import reportRoutes from './routes/reports.routes.js';
 
 const app = express();
 
+// Render (and most cloud hosts) sit behind a reverse proxy.
+// Trust the first hop so express-rate-limit can read the real
+// client IP from X-Forwarded-For instead of throwing ERR_ERL_UNEXPECTED_X_FORWARDED_FOR.
+app.set('trust proxy', 1);
+
 // Strip trailing slash from CLIENT_URL so CORS origin matching never fails
 // e.g. "https://niyam-ai-ca.vercel.app/" → "https://niyam-ai-ca.vercel.app"
 const allowedOrigin = env.CLIENT_URL.replace(/\/$/, '');
