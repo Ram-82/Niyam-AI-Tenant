@@ -12,8 +12,17 @@ import reportRoutes from './routes/reports.routes.js';
 
 const app = express();
 
+// Strip trailing slash from CLIENT_URL so CORS origin matching never fails
+// e.g. "https://niyam-ai-ca.vercel.app/" → "https://niyam-ai-ca.vercel.app"
+const allowedOrigin = env.CLIENT_URL.replace(/\/$/, '');
+
 app.use(cors({
-  origin: env.CLIENT_URL,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+    if (origin === allowedOrigin) return callback(null, true);
+    callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '1mb' }));
