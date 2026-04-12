@@ -25,7 +25,9 @@ const loginSchema = z.object({
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  // 'none' required when frontend (Vercel) and backend (Render) are on different domains.
+  // 'none' must be paired with secure:true, so in dev we use 'lax'.
+  sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 

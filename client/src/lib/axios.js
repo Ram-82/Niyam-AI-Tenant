@@ -52,7 +52,12 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        // Use the same baseURL as the rest of the API — not a hardcoded relative path.
+        // The hardcoded '/api/auth/refresh' would hit Vercel's domain, not Render.
+        const refreshBase = import.meta.env.VITE_API_URL
+          ? `${import.meta.env.VITE_API_URL}/api`
+          : '/api';
+        const { data } = await axios.post(`${refreshBase}/auth/refresh`, {}, { withCredentials: true });
         const newToken = data.accessToken;
         localStorage.setItem('accessToken', newToken);
         api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
