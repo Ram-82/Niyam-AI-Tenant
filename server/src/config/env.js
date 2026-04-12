@@ -16,6 +16,9 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().email().default('onboarding@resend.dev'),
+  // Gmail SMTP (alternative to Resend — works without a custom domain)
+  GMAIL_USER: z.string().email().optional(),
+  GMAIL_APP_PASSWORD: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
