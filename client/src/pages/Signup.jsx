@@ -97,7 +97,7 @@ export default function Signup() {
       if (!err.response) {
         toast.error('Cannot reach the server. Check your internet connection.');
       } else {
-        toast.error(parseServerError(err));
+        toast.error(err.userMessage || parseServerError(err));
       }
     } finally {
       setLoading(false);

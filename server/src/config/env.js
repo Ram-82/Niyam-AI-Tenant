@@ -15,7 +15,7 @@ const envSchema = z.object({
   SUPABASE_ANON_KEY: z.string().min(1),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().email().default('noreply@niyam.ai'),
+  EMAIL_FROM: z.string().email().default('onboarding@resend.dev'),
 });
 
 const parsed = envSchema.safeParse(process.env);

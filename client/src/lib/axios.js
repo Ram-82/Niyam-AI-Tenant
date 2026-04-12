@@ -74,6 +74,17 @@ api.interceptors.response.use(
       }
     }
 
+    // 404 on an /api/ route almost always means VITE_API_URL is not set
+    // and the request hit the Vercel frontend domain instead of the backend.
+    if (error.response?.status === 404 && error.config?.url?.includes('/auth/')) {
+      const msg =
+        'Cannot connect to the server. ' +
+        (import.meta.env.PROD && !import.meta.env.VITE_API_URL
+          ? 'VITE_API_URL is not set in Vercel. Add it in Vercel → Settings → Environment Variables, then Redeploy.'
+          : 'The backend server may be starting up (30–60 sec on free tier). Please try again.');
+      error.userMessage = msg;
+    }
+
     return Promise.reject(error);
   }
 );

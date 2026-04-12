@@ -6,6 +6,16 @@ import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import './index.css';
 
+// Warn loudly in production if the backend URL is not configured.
+// This prevents silent 404s where API calls hit the Vercel domain.
+if (import.meta.env.PROD && !import.meta.env.VITE_API_URL) {
+  console.error(
+    '[Niyam AI] VITE_API_URL is not set. ' +
+    'All API calls will 404. ' +
+    'Go to Vercel → Settings → Environment Variables → add VITE_API_URL=https://your-render-url.onrender.com → Redeploy.'
+  );
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
