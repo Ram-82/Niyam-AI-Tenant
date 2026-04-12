@@ -47,7 +47,8 @@ export async function signup(req, res, next) {
     }
 
     const password_hash = await bcrypt.hash(body.password, 12);
-    const email_verification_token = generateToken();
+    const skipVerification = env.SKIP_EMAIL_VERIFICATION === 'true';
+    const email_verification_token = skipVerification ? null : generateToken();
 
     const { data: ca, error } = await supabaseAdmin
       .from('cas')
@@ -61,11 +62,16 @@ export async function signup(req, res, next) {
         membership_number: body.membership_number || null,
         city: body.city || null,
         email_verification_token,
+        is_email_verified: skipVerification,
       })
       .select('id, full_name, email')
       .single();
 
     if (error) throw error;
+
+    if (skipVerification) {
+      return res.status(201).json({ message: 'Account created. You can now sign in.', verified: true });
+    }
 
     await sendVerificationEmail(body.email, body.full_name, email_verification_token);
 

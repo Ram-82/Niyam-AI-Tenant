@@ -19,6 +19,8 @@ const envSchema = z.object({
   // Gmail SMTP (alternative to Resend — works without a custom domain)
   GMAIL_USER: z.string().email().optional(),
   GMAIL_APP_PASSWORD: z.string().optional(),
+  // Set to 'true' to skip email verification (useful for demos/testing)
+  SKIP_EMAIL_VERIFICATION: z.enum(['true', 'false']).default('false'),
 });
 
 const parsed = envSchema.safeParse(process.env);

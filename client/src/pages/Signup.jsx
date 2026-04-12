@@ -91,8 +91,13 @@ export default function Signup() {
     if (!validate()) return;
     setLoading(true);
     try {
-      await api.post('/auth/signup', { ...form, email: form.email.trim().toLowerCase() });
-      setDone(true);
+      const res = await api.post('/auth/signup', { ...form, email: form.email.trim().toLowerCase() });
+      if (res.data?.verified) {
+        toast.success('Account created! You can now sign in.');
+        navigate('/login');
+      } else {
+        setDone(true);
+      }
     } catch (err) {
       if (!err.response) {
         toast.error('Cannot reach the server. Check your internet connection.');
