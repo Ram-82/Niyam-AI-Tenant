@@ -23,7 +23,8 @@ export async function sendVerificationEmail(email, fullName, token) {
   }
 
   try {
-    const result = await getResend().emails.send({
+    // Resend v3 SDK returns { data, error } — does NOT throw on API errors
+    const { data, error } = await getResend().emails.send({
       // Resend free tier: must use onboarding@resend.dev until you verify a domain
       from: 'Niyam AI <onboarding@resend.dev>',
       to: [email],
@@ -48,8 +49,13 @@ export async function sendVerificationEmail(email, fullName, token) {
         </div>
       `,
     });
-    console.log('[Email] Verification email sent:', result?.data?.id);
-    return result;
+    if (error) {
+      console.error('[Email] Resend API error:', JSON.stringify(error));
+      console.log(`[Email] Manual verification URL: ${verifyUrl}`);
+      return;
+    }
+    console.log('[Email] Verification email sent, id:', data?.id);
+    return data;
   } catch (err) {
     console.error('[Email] Failed to send verification email:', err.message);
     console.log(`[Email] Manual verification URL: ${verifyUrl}`);
@@ -69,7 +75,7 @@ export async function sendPasswordResetEmail(email, fullName, token) {
   }
 
   try {
-    const result = await getResend().emails.send({
+    const { data, error } = await getResend().emails.send({
       from: 'Niyam AI <onboarding@resend.dev>',
       to: [email],
       subject: 'Reset your Niyam AI password',
@@ -92,8 +98,13 @@ export async function sendPasswordResetEmail(email, fullName, token) {
         </div>
       `,
     });
-    console.log('[Email] Password reset email sent:', result?.data?.id);
-    return result;
+    if (error) {
+      console.error('[Email] Resend API error:', JSON.stringify(error));
+      console.log(`[Email] Manual reset URL: ${resetUrl}`);
+      return;
+    }
+    console.log('[Email] Password reset email sent, id:', data?.id);
+    return data;
   } catch (err) {
     console.error('[Email] Failed to send password reset email:', err.message);
     console.log(`[Email] Manual reset URL: ${resetUrl}`);
